@@ -6,6 +6,22 @@ set -e
 export DATA_PATH=${DATA_PATH:-/data/}
 CRON_SCHEDULE=${CRON_SCHEDULE:-0 1 * * *}
 
+if [[ -n "$ACCESS_KEY_FILE" ]]; then
+    if [[ -n "$ACCESS_KEY" ]]; then
+        echo "error : ACCESS_KEY and ACCESS_KEY_FILE are both set. Use one of the two"
+    else
+        ACCESS_KEY=$(cat "$ACCESS_KEY_FILE")
+    fi
+fi
+
+if [[ -n "$SECRET_KEY_FILE" ]]; then
+    if [[ -n "$SECRET_KEY" ]]; then
+        echo "error : SECRET_KEY and SECRET_KEY_FILE are both set. Use one of the two "
+    else
+        SECRET_KEY=$(cat "$SECRET_KEY_FILE")
+    fi
+fi
+
 if [[ -n "$ACCESS_KEY"  &&  -n "$SECRET_KEY" ]]; then
     echo "access_key=$ACCESS_KEY" >> /root/.s3cfg
     echo "secret_key=$SECRET_KEY" >> /root/.s3cfg
